@@ -18,7 +18,7 @@ if os.path.exists(logFile) and os.path.getsize(logFile) > LOGSIZE:
 
 def helpString():
     help_string = '''
-    Usage: ./main.py [OPTION]...
+    Usage: ./stockli.py [OPTION]...
 
     Options:
      -h, --help                 prints this page and exits.
@@ -44,8 +44,9 @@ if __name__ == '__main__':
             break
 
         elif (sys.argv[i] == '-s'):
-            import price_fetch
-            print(price_fetch.yahoo(sys.argv[i+1]).tail(5))
+            import utils.class_gen
+            #close = round(utils.class_gen.Symbol(sys.argv[i+1]).lastClose,2)
+            print(sys.argv[i+1] + ' closed at $' + str(round(utils.class_gen.Symbol(sys.argv[i+1]).lastClose,2)))
             break
 
         else:
