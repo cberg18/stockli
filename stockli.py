@@ -38,10 +38,12 @@ def helpString():
     Usage: ./stockli.py [OPTION]...
 
     Options:
-     -h, --help                 prints this page and exits.
-     -u, --update               checks for updates.
-     -s [SYMBOL]                grabs relevant information for [SYMBOL]
-     --list-current-positions   list all open positions
+     -h, --help                     prints this page and exits.
+     -u, --update                   checks for updates.
+     -s [SYMBOL]                    grabs relevant information for [SYMBOL]
+     --market-status                returns if market is open or closed
+     --list-current-positions       list all open positions
+     --buy [SYMBOL] [QUANTITY]      buy specified quantitiy of a stock
 
     stockli is pre-pre-pre-pre-pre alpha and comes with NO WARRANTY.
     If you're seeing this, you probably shouldn't be. Shame on you.
