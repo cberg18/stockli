@@ -7,14 +7,14 @@ try:
     import config
 except ModuleNotFoundError:
     print('The config file seems to be missing.')
-    print('Use ./stockli.py --config for help setting up the config file.' )
+    print('Use ./stockli.py --config for help setting up the config file.')
     quit()
 
 API_KEY = config.API_KEY
 API_SECRET = config.API_SECRET
 BASE_URL = config.BASE_URL
 
-api = tradeapi.REST(API_KEY,API_SECRET,BASE_URL)
+api = tradeapi.REST(API_KEY, API_SECRET, BASE_URL)
 account = api.get_account()
 
 logFile = '/stockli.log'
@@ -54,6 +54,7 @@ def helpString():
     print(help_string)
     return
 
+
 def configHelpString():
     config = '''
     Stockli expects a config file in its root directory (i.e. ./stockli/config.py)
@@ -69,6 +70,7 @@ def configHelpString():
     print(config)
     return
 
+
 if __name__ == '__main__':
     if (sys.argv[1] == '-h') or (sys.argv[1] == '--help'):
         helpString()
@@ -81,7 +83,8 @@ if __name__ == '__main__':
 
     elif (sys.argv[1] == '-s'):
         import utils.class_gen
-        print(sys.argv[2].upper() + ' closed at $' + str(round(utils.class_gen.Symbol(sys.argv[2]).lastClose,2)))
+        print(sys.argv[2].upper() + ' closed at $' +
+              str(round(utils.class_gen.Symbol(sys.argv[2]).lastClose, 2)))
 
     elif (sys.argv[1] == '--market-status'):
         clock = api.get_clock()
@@ -96,26 +99,28 @@ if __name__ == '__main__':
         if len(positions) == 0:
             print('You have no active positions.')
         else:
-            for i in positions:
-                print(i)
+            for position in positions:
+                print(position.symbol + ': ' + position.qty + ' @ $' + str(round(float(position.avg_entry_price ))))
 
     elif (sys.argv[1] == '--buy'):
-        print('Attempting to buy ' + sys.argv[3] + ' shares of ' + sys.argv[2].upper())
+        print('Attempting to buy ' +
+              sys.argv[3] + ' shares of ' + sys.argv[2].upper())
         order = api.submit_order(
-            symbol = sys.argv[2].upper(),
-            side = 'buy',
-            type = 'market',
-            qty = sys.argv[3],
-            time_in_force = 'day'
-            )
+            symbol=sys.argv[2].upper(),
+            side='buy',
+            type='market',
+            qty=sys.argv[3],
+            time_in_force='day'
+        )
         if order.status == 'filled':
             print('Your order was filled successfully')
 
-        elif  order.status == 'partially_filled':
+        elif order.status == 'partially_filled':
             print('Your order has been partially filled.')
 
         elif order.status == 'accepted':
-            print('Your order was accepted by Alpaca, but has not ben routed to be executed.')
+            print(
+                'Your order was accepted by Alpaca, but has not ben routed to be executed.')
 
     else:
         print('Specified option not recognized. Do main.py -h or --help for help.')
