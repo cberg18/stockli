@@ -122,5 +122,32 @@ if __name__ == '__main__':
             print(
                 'Your order was accepted by Alpaca, but has not ben routed to be executed.')
 
+    elif (sys.argv[1] == '--sell'):
+        try:
+            positions = api.get_position(sys.argv[2].upper())
+        except:
+            print('You don\'t have any positions of ' + sys.argv[2])
+
+        if int(sys.argv[3]) > int(positions.qty):
+            print('You have requested to sell more positions than you own. Use --list-current-positions to find your currently held positions.')
+        else:
+            order = api.submit_order(
+                symbol=sys.argv[2].upper(),
+                side='sell',
+                type='market',
+                qty=sys.argv[3],
+                time_in_force='day'
+            )
+            if order.status == 'filled':
+                print('Your order was filled successfully')
+
+            elif order.status == 'partially_filled':
+                print('Your order has been partially filled.')
+
+            elif order.status == 'accepted':
+                print(
+                    'Your order was accepted by Alpaca, but has not ben routed to be executed.')
+
+
     else:
         print('Specified option not recognized. Do main.py -h or --help for help.')
