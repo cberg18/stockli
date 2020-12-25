@@ -100,7 +100,8 @@ if __name__ == '__main__':
             print('You have no active positions.')
         else:
             for position in positions:
-                print(position.symbol + ': ' + position.qty + ' @ $' + str(round(float(position.avg_entry_price ))))
+                print(position.symbol + ': ' + position.qty + ' @ $' +
+                      str(round(float(position.avg_entry_price))))
 
     elif (sys.argv[1] == '--buy'):
         print('Attempting to buy ' +
@@ -147,7 +148,6 @@ if __name__ == '__main__':
             elif order.status == 'accepted':
                 print(
                     'Your order was accepted by Alpaca, but has not ben routed to be executed.')
-
 
     else:
         print('Specified option not recognized. Do main.py -h or --help for help.')
