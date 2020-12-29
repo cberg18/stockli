@@ -47,6 +47,7 @@ def helpString():
      --market-status                returns if market is open or closed
      --list-current-positions       list all open positions
      --buy [SYMBOL] [QUANTITY]      buy specified quantitiy of a stock
+     --sell [SYMBOL] [QUANTITY]     sell specified quantity of a stock
 
     stockli is pre-pre-pre-pre-pre alpha and comes with NO WARRANTY.
     If you're seeing this, you probably shouldn't be. Shame on you.
