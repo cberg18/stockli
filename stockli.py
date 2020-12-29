@@ -6,6 +6,7 @@
 
 import sys
 import os
+import time
 import alpaca_trade_api as tradeapi
 
 try:
@@ -50,6 +51,7 @@ def helpString():
      --list-current-positions       list all open positions
      --buy [SYMBOL] [QUANTITY]      buy specified quantitiy of a stock
      --sell [SYMBOL] [QUANTITY]     sell specified quantity of a stock
+     --track [SYMBOL] [PERIOD]      track a symbol at sepcified interval until interupted, default 2m (valid periods: 1m,2m,5m,15m,30m,60m,90m,1h,1d,5d,1wk,1mo,3mo)
 
     stockli is pre-pre-pre-pre-pre alpha and comes with NO WARRANTY.
     If you're seeing this, you probably shouldn't be. Shame on you.
@@ -75,6 +77,26 @@ def configHelpString():
     '''
     print(config)
     return
+
+
+def tracker(symbol,interval='2m'):
+    # this function is for tracking stock price at specified interval throughout the day. 
+    print('Starting tracking for ' + symbol + ' at ' + interval + ' intervals.')
+    ticker_last =  0
+    ticker_current = 0
+    ticker_change = 0
+    while api.get_clock() == True:
+        ticker_current = yf.Ticker("MSFT").history(period='1d', interval='2m').iloc[-1]['Close']
+        print(symbol + ': ' + str(ticker_current) + '. ' + str(ticker_change) + '%')
+        ticker_last = ticker_current
+        if not ticker_change == 0:
+            ticker_change = ((ticker_last - ticker_current)/ticker_last) * 100
+        time.sleep(interval)
+        
+    else:
+        print('The market is currently closed. ')
+        return
+        
 
 
 if __name__ == '__main__':
@@ -154,6 +176,10 @@ if __name__ == '__main__':
             elif order.status == 'accepted':
                 print(
                     'Your order was accepted by Alpaca, but has not ben routed to be executed.')
+    elif (sys.argv[1] == '--track'):
+        if len(sys.argv) == 4: period = str(sys.argv[3])
+
+        tracker(sys.argv[2].upper(), period)
 
     else:
         print('Specified option not recognized. Do main.py -h or --help for help.')
