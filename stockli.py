@@ -25,18 +25,6 @@ BASE_URL = config.PAPER_BASE_URL
 api = tradeapi.REST(API_KEY, API_SECRET, BASE_URL)
 account = api.get_account()
 
-logFile = '/stockli.log'
-oldLogFile = '/var/log/stockli.log.old'
-LOGSIZE = 10000000
-
-# check if log file needs to be rotated
-if os.path.exists(logFile) and os.path.getsize(logFile) > LOGSIZE:
-    if os.path.exists(oldLogFile):
-        os.remove(oldLogFile)
-    print("Rotating Log File")
-    os.rename(logFile, oldLogFile)
-    os.remove(logFile)
-
 
 def helpString():
     help_string = '''
