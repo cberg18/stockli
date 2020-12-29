@@ -25,6 +25,8 @@ BASE_URL = config.PAPER_BASE_URL
 api = tradeapi.REST(API_KEY, API_SECRET, BASE_URL)
 account = api.get_account()
 
+intervals = ['1m','2m','5m','15m','30m','60m']
+
 
 def helpString():
     help_string = '''
@@ -41,7 +43,7 @@ def helpString():
     --list-current-positions                        list all open positions
     --buy [SYMBOL] [QUANTITY]                       buy specified quantitiy of a stock
     --sell [SYMBOL] [QUANTITY]                      sell specified quantity of a stock
-    --track [SYMBOL] [PERIOD]                       track a symbol at sepcified interval until interupted, default 2m (valid periods: 1m,2m,5m,15m,30m,60m,90m,1h,1d,5d,1wk,1mo,3mo)
+    --track [SYMBOL] [PERIOD]                       track a symbol at sepcified interval until interupted, default 2m (valid periods: 1m,2m,5m,15m,30m,60m)
     --trade_type                                    gets currently used trading api, paper or live. CAUTION: AT THIS TIME, STOCKLI HAS NOT BEEN TESTED IN A LIVE ENVIRONMENT. USE AT YOUR OWN RISK.
 
     stockli is pre-pre-pre-pre-pre alpha and comes with NO WARRANTY.
@@ -77,13 +79,19 @@ def tracker(symbol,interval='2m'):
     ticker_last =  0
     ticker_current = 0
     ticker_change = 0
+    if interval not in intervals:
+        print('Specified interval, ' + interval + ', is not a valid interval. Valid intervals are: ')
+        print(intervals)
+        return
+
     while api.get_clock() == True:
+
         ticker_current = yf.Ticker("MSFT").history(period='1d', interval='2m').iloc[-1]['Close']
         print(symbol + ': ' + str(ticker_current) + '. ' + str(ticker_change) + '%')
         ticker_last = ticker_current
         if not ticker_change == 0:
             ticker_change = ((ticker_last - ticker_current)/ticker_last) * 100
-        time.sleep(interval)
+        time.sleep(int(interval[:-1])*60)
         
     else:
         print('The market is currently closed. ')
