@@ -1,5 +1,4 @@
 #! /usr/bin/env python3
-# TODO: stock tracker
 # TODO: trend detector
 # TODO: get calc current rating 
 # TODO: check if you have sufficient funds to process a buy order
@@ -80,6 +79,7 @@ def configHelpString():
 
 
 def tracker(symbol,interval='2m'):
+    import yfinance as yf
     # this function is for tracking stock price at specified interval throughout the day. 
     print('Starting tracking for ' + symbol + ' at ' + interval + ' intervals.')
     ticker_last =  0
