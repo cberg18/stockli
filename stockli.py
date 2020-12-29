@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 # TODO: trend detector
-# TODO: calc current rating 
+# TODO: calc current rating
 # TODO: check if you have sufficient funds to process a buy order
 
 import sys
@@ -15,7 +15,7 @@ except ModuleNotFoundError:
     print('Use ./stockli.py --config for help setting up the config file.')
     quit()
 
-trading_type = 'paper' 
+trading_type = 'paper'
 
 API_KEY = config.PAPER_API_KEY
 API_SECRET = config.PAPER_API_SECRET
@@ -25,7 +25,7 @@ BASE_URL = config.PAPER_BASE_URL
 api = tradeapi.REST(API_KEY, API_SECRET, BASE_URL)
 account = api.get_account()
 
-intervals = ['1m','2m','5m','15m','30m','60m']
+intervals = ['1m', '2m', '5m', '15m', '30m', '60m']
 
 
 def helpString():
@@ -72,31 +72,36 @@ def configHelpString():
     return
 
 
-def tracker(symbol,interval='2m'):
+def tracker(symbol, interval='2m'):
     import yfinance as yf
-    # this function is for tracking stock price at specified interval throughout the day. 
-    print('Starting tracking for ' + symbol + ' at ' + interval + ' intervals.')
-    ticker_last =  0
+    # this function is for tracking stock price at specified interval
+    # throughout the day.
+    print('Starting tracking for ' + symbol +
+          ' at ' + interval + ' intervals.')
+    ticker_last = 0
     ticker_current = 0
     ticker_change = 0
     if interval not in intervals:
-        print('Specified interval, ' + interval + ', is not a valid interval. Valid intervals are: ')
+        print('Specified interval, ' + interval +
+              ', is not a valid interval. Valid intervals are: ')
         print(intervals)
         return
 
     while api.get_clock() == True:
 
-        ticker_current = yf.Ticker("MSFT").history(period='1d', interval='2m').iloc[-1]['Close']
-        print(symbol + ': ' + str(ticker_current) + '. ' + str(ticker_change) + '%')
+        ticker_current = yf.Ticker("MSFT").history(
+            period='1d', interval='2m').iloc[-1]['Close']
+        print(symbol + ': ' + str(ticker_current) +
+              '. ' + str(ticker_change) + '%')
         ticker_last = ticker_current
         if not ticker_change == 0:
-            ticker_change = ((ticker_last - ticker_current)/ticker_last) * 100
-        time.sleep(int(interval[:-1])*60)
-        
+            ticker_change = (
+                (ticker_last - ticker_current) / ticker_last) * 100
+        time.sleep(int(interval[:-1]) * 60)
+
     else:
         print('The market is currently closed. ')
         return
-        
 
 
 if __name__ == '__main__':
@@ -154,7 +159,7 @@ if __name__ == '__main__':
     elif (sys.argv[1] == '--sell'):
         try:
             positions = api.get_position(sys.argv[2].upper())
-        except:
+        except BaseException:
             print('You don\'t have any positions of ' + sys.argv[2])
 
         if int(sys.argv[3]) > int(positions.qty):
@@ -178,15 +183,17 @@ if __name__ == '__main__':
                     'Your order was accepted by Alpaca, but has not ben routed to be executed.')
 
     elif (sys.argv[1] == '--track'):
-        if len(sys.argv) == 4: period = str(sys.argv[3])
+        if len(sys.argv) == 4:
+            period = str(sys.argv[3])
 
         tracker(sys.argv[2].upper(), period)
 
     elif (sys.argv[1] == '--trade-type'):
-        if len(sys.argv) < 3: 
+        if len(sys.argv) < 3:
             print('Not enough arguments, use -h or --help for more information. ')
             quit()
-        if sys.argv[2].lower() == 'current': print('Stockli is set to use the ' + trading_type + ' endpoint.')
+        if sys.argv[2].lower() == 'current':
+            print('Stockli is set to use the ' + trading_type + ' endpoint.')
 #        if sys.argv[2].lower() == 'set' and len(sys.argv) < 4 : print('Please specify either live or paper api. ')
 #        if sys.argv[2].lower() == 'set' and ((sys.argv[3].lower() == 'live') or (sys.argv[3].lower() == 'paper')) : config.trading_type = trading_type = sys.argv[3].lower()
 
