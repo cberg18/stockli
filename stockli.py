@@ -2,6 +2,8 @@
 # TODO: stock tracker
 # TODO: trend detector
 # TODO: get calc current rating 
+# TODO: check if you have sufficient funds to process a buy order
+
 import sys
 import os
 import alpaca_trade_api as tradeapi
