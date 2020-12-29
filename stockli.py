@@ -1,4 +1,7 @@
 #! /usr/bin/env python3
+# TODO: stock tracker
+# TODO: trend detector
+# TODO: get calc current rating 
 import sys
 import os
 import alpaca_trade_api as tradeapi
