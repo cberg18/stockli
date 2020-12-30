@@ -44,7 +44,7 @@ def helpString():
     --buy [SYMBOL] [QUANTITY]                       buy specified quantitiy of a stock
     --sell [SYMBOL] [QUANTITY]                      sell specified quantity of a stock
     --track [SYMBOL] [PERIOD]                       track a symbol at sepcified interval until interupted, default 2m (valid periods: 1m,2m,5m,15m,30m,60m)
-    --trade_type                                    gets currently used trading api, paper or live. CAUTION: AT THIS TIME, STOCKLI HAS NOT BEEN TESTED IN A LIVE ENVIRONMENT. USE AT YOUR OWN RISK.
+    --trade-type                                    gets currently used trading api, paper or live. CAUTION: AT THIS TIME, STOCKLI HAS NOT BEEN TESTED IN A LIVE ENVIRONMENT. USE AT YOUR OWN RISK.
 
     stockli is pre-pre-pre-pre-pre alpha and comes with NO WARRANTY.
     If you're seeing this, you probably shouldn't be. Shame on you.
