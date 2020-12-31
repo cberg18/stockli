@@ -100,7 +100,7 @@ def tracker(symbol, interval='2m'):
         time.sleep(int(interval[:-1]) * 60)
 
     else:
-        print('The market is currently closed. ')
+        print('The market has closed. ')
         return
 
 
@@ -183,10 +183,23 @@ if __name__ == '__main__':
                     'Your order was accepted by Alpaca, but has not ben routed to be executed.')
 
     elif (sys.argv[1] == '--track'):
-        if len(sys.argv) == 4:
-            period = str(sys.argv[3])
+        if api.get_clock() == False:
+            print('The market is currently closed. ')
+            quit()
 
-        tracker(sys.argv[2].upper(), period)
+        if len(sys.argv) < 3:
+            print(
+                'Not enough arguments. Please specify a symbol to track or use --help for more info.')
+            quit()
+
+        if len(sys.argv) == 4:
+            print(sys.argv[3])
+            period = str(sys.argv[2])
+            tracker(sys.argv[2].upper(), period)
+        else:
+            print('No period specified, using default at 2m.')
+            period = '2m'
+            tracker(sys.argv[2].upper(), period)
 
     elif (sys.argv[1] == '--trade-type'):
         if len(sys.argv) < 3:
