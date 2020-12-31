@@ -105,7 +105,7 @@ def tracker(symbol, interval='2m'):
 
 
 if __name__ == '__main__':
-    if (sys.argv[1] == '-h') or (sys.argv[1] == '--help'):
+    if (len(sys.argv) == 1) or (sys.argv[1] == '-h') or (sys.argv[1] == '--help'):
         helpString()
 
     elif (sys.argv[1] == '-u') or (sys.argv[1] == '--update'):
