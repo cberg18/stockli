@@ -17,9 +17,9 @@ except ModuleNotFoundError:
 
 trading_type = 'paper'
 
-API_KEY = config.PAPER_API_KEY
-API_SECRET = config.PAPER_API_SECRET
-BASE_URL = config.PAPER_BASE_URL
+API_KEY = config.API_KEY
+API_SECRET = config.API_SECRET
+BASE_URL = config.BASE_URL
 
 
 api = tradeapi.REST(API_KEY, API_SECRET, BASE_URL)
