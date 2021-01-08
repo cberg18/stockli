@@ -90,7 +90,7 @@ def tracker(symbol, interval='2m'):
 
     while market_status == True:
 
-        ticker_current = yf.Ticker("MSFT").history(
+        ticker_current = yf.Ticker(symbol).history(
             period='1d', interval='2m').iloc[-1]['Close']
         print(symbol + ': ' + str(ticker_current) +
               '. ' + str(ticker_change) + '%')
