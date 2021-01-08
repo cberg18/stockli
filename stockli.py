@@ -3,9 +3,11 @@
 # TODO: calc current rating
 # TODO: check if you have sufficient funds to process a buy order
 
-import sys
+import datetime
 import os
+import sys
 import time
+
 import alpaca_trade_api as tradeapi
 
 try:
@@ -17,13 +19,14 @@ except ModuleNotFoundError:
 
 trading_type = 'paper'
 
-API_KEY = config.PAPER_API_KEY
-API_SECRET = config.PAPER_API_SECRET
-BASE_URL = config.PAPER_BASE_URL
+API_KEY = config.API_KEY
+API_SECRET = config.API_SECRET
+BASE_URL = config.BASE_URL
 
-
+# initialize connection to api and get market status
 api = tradeapi.REST(API_KEY, API_SECRET, BASE_URL)
 account = api.get_account()
+market_status = api.get_clock().is_open
 
 intervals = ['1m', '2m', '5m', '15m', '30m', '60m']
 
@@ -74,6 +77,7 @@ def configHelpString():
 
 def tracker(symbol, interval='2m'):
     import yfinance as yf
+
     # this function is for tracking stock price at specified interval
     # throughout the day.
     print('Starting tracking for ' + symbol +
@@ -87,12 +91,12 @@ def tracker(symbol, interval='2m'):
         print(intervals)
         return
 
-    while api.get_clock() == True:
+    while market_status == True:
 
-        ticker_current = yf.Ticker("MSFT").history(
+        ticker_current = yf.Ticker(symbol).history(
             period='1d', interval='2m').iloc[-1]['Close']
-        print(symbol + ': ' + str(ticker_current) +
-              '. ' + str(ticker_change) + '%')
+        print(symbol + ': $' + str(round(ticker_current, 2)) +
+              ' Change: ' + str(ticker_change) + '%')
         ticker_last = ticker_current
         if not ticker_change == 0:
             ticker_change = (
@@ -120,8 +124,7 @@ if __name__ == '__main__':
               str(round(utils.class_gen.Symbol(sys.argv[2]).lastClose, 2)))
 
     elif (sys.argv[1] == '--market-status'):
-        clock = api.get_clock()
-        if clock == True:
+        if market_status == True:
             print('The market is currently open.')
         else:
             print('The market is currently closed.')
@@ -183,7 +186,9 @@ if __name__ == '__main__':
                     'Your order was accepted by Alpaca, but has not ben routed to be executed.')
 
     elif (sys.argv[1] == '--track'):
-        if api.get_clock() == False:
+        # TODO: Color formatting
+        # TODO: If closed, get next open
+        if market_status == False:
             print('The market is currently closed. ')
             quit()
 
@@ -193,9 +198,9 @@ if __name__ == '__main__':
             quit()
 
         if len(sys.argv) == 4:
-            print(sys.argv[3])
-            period = str(sys.argv[2])
+            period = str(sys.argv[3])
             tracker(sys.argv[2].upper(), period)
+
         else:
             print('No period specified, using default at 2m.')
             period = '2m'
