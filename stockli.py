@@ -3,9 +3,12 @@
 # TODO: calc current rating
 # TODO: check if you have sufficient funds to process a buy order
 
+import datetime
+import os
 import sys
 import os
 import time
+
 import alpaca_trade_api as tradeapi
 
 try:
@@ -75,6 +78,7 @@ def configHelpString():
 
 def tracker(symbol, interval='2m'):
     import yfinance as yf
+
     # this function is for tracking stock price at specified interval
     # throughout the day.
     print('Starting tracking for ' + symbol +
@@ -92,7 +96,7 @@ def tracker(symbol, interval='2m'):
 
         ticker_current = yf.Ticker(symbol).history(
             period='1d', interval='2m').iloc[-1]['Close']
-        print(symbol + ': $' + str(ticker_current) +
+        print(symbol + ': $' + str(round(ticker_current,2)) +
               ' Change: ' + str(ticker_change) + '%')
         ticker_last = ticker_current
         if not ticker_change == 0:
