@@ -92,8 +92,8 @@ def tracker(symbol, interval='2m'):
 
         ticker_current = yf.Ticker(symbol).history(
             period='1d', interval='2m').iloc[-1]['Close']
-        print(symbol + ': ' + str(ticker_current) +
-              '. ' + str(ticker_change) + '%')
+        print(symbol + ': $' + str(ticker_current) +
+              ' Change: ' + str(ticker_change) + '%')
         ticker_last = ticker_current
         if not ticker_change == 0:
             ticker_change = (
@@ -193,9 +193,9 @@ if __name__ == '__main__':
             quit()
 
         if len(sys.argv) == 4:
-            print(sys.argv[3])
-            period = str(sys.argv[2])
+            period = str(sys.argv[3])
             tracker(sys.argv[2].upper(), period)
+
         else:
             print('No period specified, using default at 2m.')
             period = '2m'
