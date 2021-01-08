@@ -21,9 +21,10 @@ API_KEY = config.API_KEY
 API_SECRET = config.API_SECRET
 BASE_URL = config.BASE_URL
 
-
+# initialize connection to api and get market status
 api = tradeapi.REST(API_KEY, API_SECRET, BASE_URL)
 account = api.get_account()
+market_status = api.get_clock().is_open
 
 intervals = ['1m', '2m', '5m', '15m', '30m', '60m']
 
@@ -87,7 +88,7 @@ def tracker(symbol, interval='2m'):
         print(intervals)
         return
 
-    while api.get_clock() == True:
+    while market_status == True:
 
         ticker_current = yf.Ticker("MSFT").history(
             period='1d', interval='2m').iloc[-1]['Close']
@@ -120,8 +121,7 @@ if __name__ == '__main__':
               str(round(utils.class_gen.Symbol(sys.argv[2]).lastClose, 2)))
 
     elif (sys.argv[1] == '--market-status'):
-        clock = api.get_clock()
-        if clock == True:
+        if market_status == True:
             print('The market is currently open.')
         else:
             print('The market is currently closed.')
@@ -183,7 +183,7 @@ if __name__ == '__main__':
                     'Your order was accepted by Alpaca, but has not ben routed to be executed.')
 
     elif (sys.argv[1] == '--track'):
-        if api.get_clock() == False:
+        if market_status == False:
             print('The market is currently closed. ')
             quit()
 
