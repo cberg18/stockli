@@ -183,6 +183,8 @@ if __name__ == '__main__':
                     'Your order was accepted by Alpaca, but has not ben routed to be executed.')
 
     elif (sys.argv[1] == '--track'):
+        # TODO: Color formatting
+        # TODO: If closed, get next open
         if market_status == False:
             print('The market is currently closed. ')
             quit()
