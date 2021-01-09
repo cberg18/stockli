@@ -101,6 +101,11 @@ def tracker(symbol, interval='2m'):
         if not ticker_change == 0:
             ticker_change = (
                 (ticker_last - ticker_current) / ticker_last) * 100
+
+        if api.get_clock().is_open == False:
+            # TODO: Fix poor use of global
+            global market_status = False
+
         time.sleep(int(interval[:-1]) * 60)
 
     else:
