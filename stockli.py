@@ -104,7 +104,7 @@ def tracker(symbol, interval='2m'):
 
         if api.get_clock().is_open == False:
             # TODO: Fix poor use of global
-            #global market_status = False
+            # global market_status = False
             pass
         time.sleep(int(interval[:-1]) * 60)
 
@@ -221,13 +221,16 @@ if __name__ == '__main__':
 #        if sys.argv[2].lower() == 'set' and ((sys.argv[3].lower() == 'live') or (sys.argv[3].lower() == 'paper')) : config.trading_type = trading_type = sys.argv[3].lower()
 
     elif (sys.argv[1] == '--plot'):
-        if len(sys.argv < 3):
+        if (len(sys.argv) < 3):
             print('Specify symbol to be plotted.')
-        
-        import utils.price_fetch
-        
+
+        from utils import price_fetch
+        from utils import plot
         df = price_fetch.yahoo(sys.argv[2].upper())
-        print(df)
+
+        plot.plot(sys.argv[2].upper(), df['Close'])
+        print('Most recent close of \'' +
+              sys.argv[2].upper() + '\': $' + str(df.iloc[-1]['Close']))
 
     else:
         print('Specified option not recognized. Do main.py -h or --help for help.')
