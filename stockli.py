@@ -101,6 +101,11 @@ def tracker(symbol, interval='2m'):
         if not ticker_change == 0:
             ticker_change = (
                 (ticker_last - ticker_current) / ticker_last) * 100
+
+        if api.get_clock().is_open == False:
+            # TODO: Fix poor use of global
+            # global market_status = False
+            pass
         time.sleep(int(interval[:-1]) * 60)
 
     else:
@@ -214,6 +219,18 @@ if __name__ == '__main__':
             print('Stockli is set to use the ' + trading_type + ' endpoint.')
 #        if sys.argv[2].lower() == 'set' and len(sys.argv) < 4 : print('Please specify either live or paper api. ')
 #        if sys.argv[2].lower() == 'set' and ((sys.argv[3].lower() == 'live') or (sys.argv[3].lower() == 'paper')) : config.trading_type = trading_type = sys.argv[3].lower()
+
+    elif (sys.argv[1] == '--plot'):
+        if (len(sys.argv) < 3):
+            print('Specify symbol to be plotted.')
+
+        from utils import price_fetch
+        from utils import plot
+        df = price_fetch.yahoo(sys.argv[2].upper())
+
+        plot.plot(sys.argv[2].upper(), df['Close'])
+        print('Most recent close of \'' +
+              sys.argv[2].upper() + '\': $' + str(df.iloc[-1]['Close']))
 
     else:
         print('Specified option not recognized. Do main.py -h or --help for help.')
