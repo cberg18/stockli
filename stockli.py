@@ -28,6 +28,7 @@ api = tradeapi.REST(API_KEY, API_SECRET, BASE_URL)
 account = api.get_account()
 market_status = api.get_clock().is_open
 
+#valid intervals for --track
 intervals = ['1m', '2m', '5m', '15m', '30m', '60m']
 
 
