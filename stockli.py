@@ -25,7 +25,7 @@ api = utils.api_connect.alpaca_connection()
 account = api.get_account()
 market_status = api.get_clock().is_open
 
-#valid intervals for --track
+# valid intervals for --track
 intervals = ['1m', '2m', '5m', '15m', '30m', '60m']
 
 
@@ -147,6 +147,10 @@ if __name__ == '__main__':
                       str(round(float(position.avg_entry_price))))
 
     elif (sys.argv[1] == '--buy'):
+        '''
+        syntax ./stockli --buy [SYMBOL] [QUANTITY]
+        '''
+
         print('Attempting to buy ' +
               sys.argv[3] + ' shares of ' + sys.argv[2].upper())
         order = api.submit_order(
@@ -167,6 +171,9 @@ if __name__ == '__main__':
                 'Your order was accepted by Alpaca, but has not ben routed to be executed.')
 
     elif (sys.argv[1] == '--sell'):
+        '''
+        syntax ./stockli --sell [SYMBOL] [QUANTITY]
+        '''
         try:
             positions = api.get_position(sys.argv[2].upper())
         except BaseException:
@@ -193,6 +200,9 @@ if __name__ == '__main__':
                     'Your order was accepted by Alpaca, but has not ben routed to be executed.')
 
     elif (sys.argv[1] == '--track'):
+        '''
+        syntax ./stockli --track [SYMBOL] [PERIOD]
+        '''
         # TODO: Color formatting
         # TODO: If closed, get next open
         if market_status == False:
