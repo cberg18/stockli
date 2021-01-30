@@ -6,6 +6,7 @@ def plot(plot_name, y, range=30):
     Simple line plot of the stock price.
     y = close price
     range = last x days of price to plot, For full history use -1, default 30 days.
+    plotext does not currently support datetime so x axis labels are just len(y) numbers
     """
     if y.empty:
         return print('y cannot be None')

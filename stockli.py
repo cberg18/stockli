@@ -23,11 +23,13 @@ API_KEY = config.API_KEY
 API_SECRET = config.API_SECRET
 BASE_URL = config.BASE_URL
 
+# TODO: move connections to api so that it is only called when accessing the alpaca api
 # initialize connection to api and get market status
 api = tradeapi.REST(API_KEY, API_SECRET, BASE_URL)
 account = api.get_account()
 market_status = api.get_clock().is_open
 
+#valid intervals for --track
 intervals = ['1m', '2m', '5m', '15m', '30m', '60m']
 
 
@@ -127,6 +129,10 @@ if __name__ == '__main__':
         import utils.class_gen
         print(sys.argv[2].upper() + ' closed at $' +
               str(round(utils.class_gen.Symbol(sys.argv[2]).lastClose, 2)))
+
+    elif (sys.argv[1] == '-a'):
+        import utils.analytics
+        utils.analytics.analytics(sys.argv[2], market_status)
 
     elif (sys.argv[1] == '--market-status'):
         if market_status == True:
