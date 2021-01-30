@@ -17,15 +17,11 @@ except ModuleNotFoundError:
     print('Use ./stockli.py --config for help setting up the config file.')
     quit()
 
-trading_type = 'paper'
-
-API_KEY = config.API_KEY
-API_SECRET = config.API_SECRET
-BASE_URL = config.BASE_URL
 
 # TODO: move connections to api so that it is only called when accessing the alpaca api
-# initialize connection to api and get market status
-api = tradeapi.REST(API_KEY, API_SECRET, BASE_URL)
+import utils.api_connect
+api = utils.api_connect.alpaca_connection()
+
 account = api.get_account()
 market_status = api.get_clock().is_open
 
