@@ -19,8 +19,6 @@ except ModuleNotFoundError:
     quit()
 
 
-
-
 # valid intervals for --track
 intervals = ['1m', '2m', '5m', '15m', '30m', '60m']
 
@@ -74,13 +72,13 @@ def tracker(symbol, interval='2m'):
     This function is for tracking stock price at specified interval
     throughout the day.
     '''
-    
+
     import yfinance as yf
 
-    #initialize api connection
+    # initialize api connection
     api = utils.api_connect.alpaca_connection()
     market_status = api.get_clock().is_open
-    
+
     print('Starting tracking for ' + symbol +
           ' at ' + interval + ' intervals.')
     ticker_last = 0
@@ -140,10 +138,9 @@ if __name__ == '__main__':
         '''
         Check if market is open, get next open if not currently open.
         '''
-        
+
         api = utils.api_connect.alpaca_connection()
         market_status = api.get_clock().is_open
-
 
         if market_status == True:
             print('The market is currently open.')
@@ -166,7 +163,7 @@ if __name__ == '__main__':
         '''
         syntax ./stockli --buy [SYMBOL] [QUANTITY]
         '''
-        
+
         api = utils.api_connect.alpaca_connection()
 
         print('Attempting to buy ' +
