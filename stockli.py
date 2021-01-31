@@ -8,7 +8,8 @@ import os
 import sys
 import time
 
-import alpaca_trade_api as tradeapi
+import utils.api_connect
+
 
 try:
     import config
@@ -17,19 +18,8 @@ except ModuleNotFoundError:
     print('Use ./stockli.py --config for help setting up the config file.')
     quit()
 
-trading_type = 'paper'
 
-API_KEY = config.API_KEY
-API_SECRET = config.API_SECRET
-BASE_URL = config.BASE_URL
-
-# TODO: move connections to api so that it is only called when accessing the alpaca api
-# initialize connection to api and get market status
-api = tradeapi.REST(API_KEY, API_SECRET, BASE_URL)
-account = api.get_account()
-market_status = api.get_clock().is_open
-
-#valid intervals for --track
+# valid intervals for --track
 intervals = ['1m', '2m', '5m', '15m', '30m', '60m']
 
 
@@ -63,7 +53,7 @@ def helpString():
 
 def configHelpString():
     config = '''
-    Stockli expects a config file in its root directory (i.e. ./stockli/config.py)
+    Stockli expects a config file in its root directory (i.e. ./stockli/config.ini)
     with the following information:
 
     BASE_URL = 'https://paper-api.alpaca.markets' OR 'https://api.alpaca.markets'
@@ -78,10 +68,17 @@ def configHelpString():
 
 
 def tracker(symbol, interval='2m'):
+    '''
+    This function is for tracking stock price at specified interval
+    throughout the day.
+    '''
+
     import yfinance as yf
 
-    # this function is for tracking stock price at specified interval
-    # throughout the day.
+    # initialize api connection
+    api = utils.api_connect.alpaca_connection()
+    market_status = api.get_clock().is_open
+
     print('Starting tracking for ' + symbol +
           ' at ' + interval + ' intervals.')
     ticker_last = 0
@@ -104,9 +101,8 @@ def tracker(symbol, interval='2m'):
             ticker_change = (
                 (ticker_last - ticker_current) / ticker_last) * 100
 
-        if api.get_clock().is_open == False:
-            # TODO: Fix poor use of global
-            # global market_status = False
+        if market_status == False:
+            market_status = False
             pass
         time.sleep(int(interval[:-1]) * 60)
 
@@ -123,6 +119,7 @@ if __name__ == '__main__':
         o = os.system('./update.sh')
 
     elif (sys.argv[1] == '--config'):
+        # TODO: Interactive config
         configHelpString()
 
     elif (sys.argv[1] == '-s'):
@@ -132,15 +129,32 @@ if __name__ == '__main__':
 
     elif (sys.argv[1] == '-a'):
         import utils.analytics
-        utils.analytics.analytics(sys.argv[2], market_status)
+        if len(sys.argv) < 3:
+            print(
+                'Not enough arguments. Please enter a symbol for analytics or use --help for more info.')
+            quit()
+        else:    
+            api = utils.api_connect.alpaca_connection()
+            market_status = api.get_clock().is_open
+
+            utils.analytics.analytics(sys.argv[2], market_status)
 
     elif (sys.argv[1] == '--market-status'):
+        '''
+        Check if market is open, get next open if not currently open.
+        '''
+
+        api = utils.api_connect.alpaca_connection()
+        market_status = api.get_clock().is_open
+
         if market_status == True:
             print('The market is currently open.')
         else:
             print('The market is currently closed.')
 
     elif (sys.argv[1] == '--list-current-positions'):
+        positions = 0
+        api = utils.api_connect.alpaca_connection()
         positions = api.list_positions()
 
         if len(positions) == 0:
@@ -151,6 +165,12 @@ if __name__ == '__main__':
                       str(round(float(position.avg_entry_price))))
 
     elif (sys.argv[1] == '--buy'):
+        '''
+        syntax ./stockli --buy [SYMBOL] [QUANTITY]
+        '''
+
+        api = utils.api_connect.alpaca_connection()
+
         print('Attempting to buy ' +
               sys.argv[3] + ' shares of ' + sys.argv[2].upper())
         order = api.submit_order(
@@ -171,6 +191,12 @@ if __name__ == '__main__':
                 'Your order was accepted by Alpaca, but has not ben routed to be executed.')
 
     elif (sys.argv[1] == '--sell'):
+        '''
+        syntax ./stockli --sell [SYMBOL] [QUANTITY]
+        '''
+        api = utils.api_connect.alpaca_connection()
+        positions = 0
+
         try:
             positions = api.get_position(sys.argv[2].upper())
         except BaseException:
@@ -197,6 +223,11 @@ if __name__ == '__main__':
                     'Your order was accepted by Alpaca, but has not ben routed to be executed.')
 
     elif (sys.argv[1] == '--track'):
+        '''
+        syntax ./stockli --track [SYMBOL] [PERIOD]
+        '''
+        api = utils.api_connect.alpaca_connection()
+        market_status = api.get_clock().is_open
         # TODO: Color formatting
         # TODO: If closed, get next open
         if market_status == False:
@@ -218,6 +249,7 @@ if __name__ == '__main__':
             tracker(sys.argv[2].upper(), period)
 
     elif (sys.argv[1] == '--trade-type'):
+        trading_type = 'paper'
         if len(sys.argv) < 3:
             print('Not enough arguments, use -h or --help for more information. ')
             quit()
@@ -230,8 +262,7 @@ if __name__ == '__main__':
         if (len(sys.argv) < 3):
             print('Specify symbol to be plotted.')
 
-        from utils import price_fetch
-        from utils import plot
+        from utils import plot, price_fetch
         df = price_fetch.yahoo(sys.argv[2].upper())
 
         plot.plot(sys.argv[2].upper(), df['Close'])
