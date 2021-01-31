@@ -129,10 +129,15 @@ if __name__ == '__main__':
 
     elif (sys.argv[1] == '-a'):
         import utils.analytics
-        api = utils.api_connect.alpaca_connection()
-        market_status = api.get_clock().is_open
+        if len(sys.argv) < 3:
+            print(
+                'Not enough arguments. Please enter a symbol for analytics or use --help for more info.')
+            quit()
+        else:    
+            api = utils.api_connect.alpaca_connection()
+            market_status = api.get_clock().is_open
 
-        utils.analytics.analytics(sys.argv[2], market_status)
+            utils.analytics.analytics(sys.argv[2], market_status)
 
     elif (sys.argv[1] == '--market-status'):
         '''
