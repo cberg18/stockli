@@ -120,7 +120,20 @@ if __name__ == '__main__':
 
     elif (sys.argv[1] == '--config'):
         # TODO: Interactive config
-        configHelpString()
+        if sys.argv[2] == 'help':
+            configHelpString()
+        elif sys.argv[2] == 'configured-accounts':
+            config.list_configured_accounts()
+        elif sys.argv[2] == 'add-account':
+            account_name = input('Enter account name: ')
+            api_key = input('Enter API Key: ')
+            api_secret = input('Enter API Secret: ')
+            base_url = input('Enter Base URL: ')
+            config.add_account_details(
+                account_name.upper(), api_key, api_secret, base_url)
+        elif sys.argv[2] == 'remove-account':
+            account_name = input('Enter name of account to remove: ')
+            config.remove_account_details(account_name.upper())
 
     elif (sys.argv[1] == '-s'):
         import utils.class_gen
@@ -133,7 +146,7 @@ if __name__ == '__main__':
             print(
                 'Not enough arguments. Please enter a symbol for analytics or use --help for more info.')
             quit()
-        else:    
+        else:
             api = utils.api_connect.alpaca_connection()
             market_status = api.get_clock().is_open
 
@@ -195,7 +208,6 @@ if __name__ == '__main__':
         syntax ./stockli --sell [SYMBOL] [QUANTITY]
         '''
         api = utils.api_connect.alpaca_connection()
-        positions = 0
 
         try:
             positions = api.get_position(sys.argv[2].upper())
