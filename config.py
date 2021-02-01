@@ -17,14 +17,14 @@ method = config_object['TRADE_METHOD']['trade_method']
 
 
 if method == 'paper':
-    API_KEY = config_object['PAPER']['PAPER_API_KEY']
-    API_SECRET = config_object['PAPER']['PAPER_API_SECRET']
-    BASE_URL = config_object['PAPER']['PAPER_BASE_URL']
+    API_KEY = config_object['PAPER']['API_KEY']
+    API_SECRET = config_object['PAPER']['API_SECRET']
+    BASE_URL = config_object['PAPER']['BASE_URL']
 
 elif method == 'live':
-    API_KEY = config_object['LIVE']['LIVE_API_KEY']
-    API_SECRET = config_object['LIVE']['LIVE_API_SECRET']
-    BASE_URL = config_object['LIVE']['LIVE_BASE_URL']
+    API_KEY = config_object['LIVE']['API_KEY']
+    API_SECRET = config_object['LIVE']['API_SECRET']
+    BASE_URL = config_object['LIVE']['BASE_URL']
 
 
 def load_config():
