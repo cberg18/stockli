@@ -4,12 +4,11 @@ try:
     import config
 except ModuleNotFoundError:
     print('The config file seems to be missing.')
-    print('Use ./stockli.py --config for help setting up the config file.')
+    print('Use ./stockli.py --config help for help setting up the config file.')
     quit()
 
 
 def alpaca_connection():
-    trading_type = 'paper'
 
     API_KEY = config.API_KEY
     API_SECRET = config.API_SECRET
