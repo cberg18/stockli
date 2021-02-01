@@ -8,25 +8,6 @@ config_object = ConfigParser()
 config_object.read('config.ini')
 
 
-'''
-The following section is temproary and only to 
-make the main program work until I can build proper
-config creation.
-'''
-method = config_object['TRADE_METHOD']['trade_method']
-
-
-if method == 'paper':
-    API_KEY = config_object['PAPER']['API_KEY']
-    API_SECRET = config_object['PAPER']['API_SECRET']
-    BASE_URL = config_object['PAPER']['BASE_URL']
-
-elif method == 'live':
-    API_KEY = config_object['LIVE']['API_KEY']
-    API_SECRET = config_object['LIVE']['API_SECRET']
-    BASE_URL = config_object['LIVE']['BASE_URL']
-
-
 def load_config():
     """
     This function loads the config.
@@ -82,6 +63,25 @@ def remove_account_details(account_name):
             config_object.write(conf)
 
         print(account_name + ' successfully removed.')
+
+
+def load_keys():
+    config_object = load_config()
+    trade_method = config_object['TRADE_METHOD']['trade_method']
+
+    if trade_method == 'paper':
+        API_KEY = config_object['PAPER']['API_KEY']
+        API_SECRET = config_object['PAPER']['API_SECRET']
+        BASE_URL = config_object['PAPER']['BASE_URL']
+
+        return (API_KEY, API_SECRET, BASE_URL)
+
+    if trade_method == 'live':
+        API_KEY = config_object['LIVE']['API_KEY']
+        API_SECRET = config_object['LIVE']['API_SECRET']
+        BASE_URL = config_object['LIVE']['BASE_URL']
+
+        return (API_KEY, API_SECRET, BASE_URL)
 
 
 def modify_account_details(parameter_list):

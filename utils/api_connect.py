@@ -1,3 +1,4 @@
+from config import API_KEY, API_SECRET, BASE_URL
 import alpaca_trade_api as tradeapi
 
 try:
@@ -10,9 +11,7 @@ except ModuleNotFoundError:
 
 def alpaca_connection():
 
-    API_KEY = config.API_KEY
-    API_SECRET = config.API_SECRET
-    BASE_URL = config.BASE_URL
+    API_KEY, API_SECRET, BASE_URL = config.load_keys()
 
     # initialize connection to api and get market status
     api = tradeapi.REST(API_KEY, API_SECRET, BASE_URL)
