@@ -15,7 +15,7 @@ try:
     import config
 except ModuleNotFoundError:
     print('The config file seems to be missing.')
-    print('Use ./stockli.py --config for help setting up the config file.')
+    print('Use ./stockli.py --config help for help setting up the config file.')
     quit()
 
 
@@ -32,11 +32,12 @@ def helpString():
 
     Options:
     -h, --help                                      prints this page and exits.
-    -u, --update                                    checks for updates.
     -s [SYMBOL]                                     grabs relevant information for [SYMBOL]
-    --market-status                                 returns if market is open or closed
-    --list-current-positions                        list all open positions
+    -u, --update                                    checks for updates.
     --buy [SYMBOL] [QUANTITY]                       buy specified quantitiy of a stock
+    --config                                        modify config, --config help for more information
+    --list-current-positions                        list all open positions
+    --market-status                                 returns if market is open or closed
     --sell [SYMBOL] [QUANTITY]                      sell specified quantity of a stock
     --track [SYMBOL] [PERIOD]                       track a symbol at sepcified interval until interupted, default 2m (valid periods: 1m,2m,5m,15m,30m,60m)
     --trade-type                                    gets currently used trading api, paper or live. CAUTION: AT THIS TIME, STOCKLI HAS NOT BEEN TESTED IN A LIVE ENVIRONMENT. USE AT YOUR OWN RISK.
@@ -103,7 +104,7 @@ def tracker(symbol, interval='2m'):
 
         if market_status == False:
             market_status = False
-            pass
+
         time.sleep(int(interval[:-1]) * 60)
 
     else:
@@ -207,8 +208,10 @@ if __name__ == '__main__':
         '''
         syntax ./stockli --sell [SYMBOL] [QUANTITY]
         '''
-        api = utils.api_connect.alpaca_connection()
+        # dummy variable to suppres pylance warning
+        positions = ''
 
+        api = utils.api_connect.alpaca_connection()
         try:
             positions = api.get_position(sys.argv[2].upper())
         except BaseException:
