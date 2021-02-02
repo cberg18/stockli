@@ -95,7 +95,7 @@ def tracker(symbol, interval='2m'):
 
         ticker_current = yf.Ticker(symbol).history(
             period='1d', interval='2m').iloc[-1]['Close']
-        print(symbol + ': $%.2f Change: %.2f\% ' %(ticker_current,ticker_change))
+        print(symbol + ': $%.2f Change: %.2f\% ' % (ticker_current, ticker_change))
         ticker_last = ticker_current
         if not ticker_change == 0:
             ticker_change = (
@@ -122,8 +122,10 @@ if __name__ == '__main__':
         # TODO: Interactive config
         if sys.argv[2] == 'help':
             configHelpString()
+
         elif sys.argv[2] == 'configured-accounts':
             config.list_configured_accounts()
+
         elif sys.argv[2] == 'add-account':
             account_name = input('Enter account name: ')
             api_key = input('Enter API Key: ')
@@ -131,14 +133,15 @@ if __name__ == '__main__':
             base_url = input('Enter Base URL: ')
             config.add_account_details(
                 account_name.upper(), api_key, api_secret, base_url)
+
         elif sys.argv[2] == 'remove-account':
             account_name = input('Enter name of account to remove: ')
             config.remove_account_details(account_name.upper())
 
     elif (sys.argv[1] == '-s'):
         import utils.class_gen
-        print(sys.argv[2].upper() + ' closed at $' +
-              str(round(utils.class_gen.Symbol(sys.argv[2]).lastClose, 2)))
+        print(sys.argv[2].upper() + ' closed at $%.2f' %
+              (utils.class_gen.Symbol(sys.argv[2]).lastClose))
 
     elif (sys.argv[1] == '-a'):
         import utils.analytics
@@ -146,6 +149,7 @@ if __name__ == '__main__':
             print(
                 'Not enough arguments. Please enter a symbol for analytics or use --help for more info.')
             quit()
+
         else:
             api = utils.api_connect.alpaca_connection()
             market_status = api.get_clock().is_open
@@ -218,6 +222,7 @@ if __name__ == '__main__':
 
         if int(sys.argv[3]) > int(positions.qty):
             print('You have requested to sell more positions than you own. Use --list-current-positions to find your currently held positions.')
+
         else:
             order = api.submit_order(
                 symbol=sys.argv[2].upper(),
@@ -236,7 +241,7 @@ if __name__ == '__main__':
                 print(
                     'Your order was accepted by Alpaca, but has not ben routed to be executed.')
 
-    elif (sys.argv[1] == '--track'):
+    elif (sys.argv[1] == '--track') or (sys.argv[1] == '-t'):
         '''
         syntax ./stockli --track [SYMBOL] [PERIOD]
         '''
@@ -266,8 +271,8 @@ if __name__ == '__main__':
         trading_type = 'paper'
         if len(sys.argv) < 3:
             print('Not enough arguments, use -h or --help for more information. ')
-            quit()
-        if sys.argv[2].lower() == 'current':
+
+        elif sys.argv[2].lower() == 'current':
             print('Stockli is set to use the ' + trading_type + ' endpoint.')
 #        if sys.argv[2].lower() == 'set' and len(sys.argv) < 4 : print('Please specify either live or paper api. ')
 #        if sys.argv[2].lower() == 'set' and ((sys.argv[3].lower() == 'live') or (sys.argv[3].lower() == 'paper')) : config.trading_type = trading_type = sys.argv[3].lower()
