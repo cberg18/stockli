@@ -95,8 +95,7 @@ def tracker(symbol, interval='2m'):
 
         ticker_current = yf.Ticker(symbol).history(
             period='1d', interval='2m').iloc[-1]['Close']
-        print(symbol + ': $' + str(round(ticker_current, 2)) +
-              ' Change: ' + str(ticker_change) + '%')
+        print(symbol + ': $%.2f Change: %.2f\% ' %(ticker_current,ticker_change))
         ticker_last = ticker_current
         if not ticker_change == 0:
             ticker_change = (

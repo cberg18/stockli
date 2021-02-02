@@ -1,4 +1,4 @@
-from config import API_KEY, API_SECRET, BASE_URL
+import config 
 import alpaca_trade_api as tradeapi
 
 try:
