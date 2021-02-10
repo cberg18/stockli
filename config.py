@@ -53,6 +53,7 @@ def add_account_details(account_name, api_key, api_secret, base_url):
 
         with open('config.ini', 'w') as conf:
             config_object.write(conf)
+        print(account_name.upper() + ' has been configured. ')
 
 
 def remove_account_details(account_name):
