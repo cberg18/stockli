@@ -19,6 +19,7 @@ def plot(plot_name, y, range=30):
     plt.scatter(y)
     plt.title(plot_name)
     plt.ylabel('Close Price - $')
+    plt.grid(True)
     plt.axes_color('iron')
     plt.canvas_color('iron')
     plt.show()

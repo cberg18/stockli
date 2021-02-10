@@ -294,7 +294,7 @@ if __name__ == '__main__':
 
         plot.plot(sys.argv[2].upper(), df['Close'])
         print('Most recent close of \'' +
-              sys.argv[2].upper() + '\': $$%.2f' % (df.iloc[-1]['Close']))
+              sys.argv[2].upper() + '\': $%.2f' % (df.iloc[-1]['Close']))
 
     else:
         print('Specified option not recognized. Do main.py -h or --help for help.')
