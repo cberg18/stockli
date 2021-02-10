@@ -30,6 +30,11 @@ def list_configured_accounts():
             print(i)
 
 
+def get_trade_type():
+    config_object = load_config()
+    return config_object['TRADE_METHOD']['trade_method']
+
+
 def add_account_details(account_name, api_key, api_secret, base_url):
     """
     This function provides functionality for adding account details.

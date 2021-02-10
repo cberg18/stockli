@@ -266,12 +266,11 @@ if __name__ == '__main__':
             tracker(sys.argv[2].upper(), period)
 
     elif (sys.argv[1] == '--trade-type'):
-        trading_type = 'paper'
         if len(sys.argv) < 2:
             print('Not enough arguments, use -h or --help for more information. ')
 
-        elif sys.argv[2].lower() == 'current':
-            print('Stockli is set to use the ' + trading_type + ' endpoint.')
+        trade_type = config.get_trade_type()
+        print('Stockli is set to use the ' + trade_type + ' endpoint.')
 #        if sys.argv[2].lower() == 'set' and len(sys.argv) < 4 : print('Please specify either live or paper api. ')
 #        if sys.argv[2].lower() == 'set' and ((sys.argv[3].lower() == 'live') or (sys.argv[3].lower() == 'paper')) : config.trading_type = trading_type = sys.argv[3].lower()
 
