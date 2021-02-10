@@ -272,7 +272,6 @@ if __name__ == '__main__':
             tracker(sys.argv[2].upper(), period)
 
     elif (sys.argv[1] == '--trade-type'):
-        print(len(sys.argv))
         if len(sys.argv) < 3:
             trade_type = config.get_trade_type()
             print('Stockli is set to use the ' + trade_type + ' endpoint.')
