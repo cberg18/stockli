@@ -3,7 +3,7 @@
 # TODO: calc current rating
 # TODO: check if you have sufficient funds to process a buy order
 
-import datetime
+
 import os
 import sys
 import time
@@ -95,7 +95,7 @@ def tracker(symbol, interval='2m'):
 
         ticker_current = yf.Ticker(symbol).history(
             period='1d', interval='2m').iloc[-1]['Close']
-        print(symbol + ': $%.2f Change: %.2f\% ' % (ticker_current, ticker_change))
+        print(symbol + ': $%.2f' % (ticker_current))
         ticker_last = ticker_current
         if not ticker_change == 0:
             ticker_change = (
@@ -211,8 +211,6 @@ if __name__ == '__main__':
         '''
         syntax ./stockli --sell [SYMBOL] [QUANTITY]
         '''
-        # dummy variable to suppres pylance warning
-        positions = ''
 
         api = utils.api_connect.alpaca_connection()
         try:
