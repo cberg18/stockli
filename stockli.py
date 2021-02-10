@@ -38,6 +38,7 @@ def helpString():
     --config                                        modify config, --config help for more information
     --list-current-positions                        list all open positions
     --market-status                                 returns if market is open or closed
+    --plot [SYMBOL]                                 simple plot of the last 30 days for [SYMBOL] 
     --sell [SYMBOL] [QUANTITY]                      sell specified quantity of a stock
     --track [SYMBOL] [PERIOD]                       track a symbol at sepcified interval until interupted, default 2m (valid periods: 1m,2m,5m,15m,30m,60m)
     --trade-type                                    gets currently used trading api, paper or live. CAUTION: AT THIS TIME, STOCKLI HAS NOT BEEN TESTED IN A LIVE ENVIRONMENT. USE AT YOUR OWN RISK.
