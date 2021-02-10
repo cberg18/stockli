@@ -267,7 +267,7 @@ if __name__ == '__main__':
 
     elif (sys.argv[1] == '--trade-type'):
         trading_type = 'paper'
-        if len(sys.argv) < 3:
+        if len(sys.argv) < 2:
             print('Not enough arguments, use -h or --help for more information. ')
 
         elif sys.argv[2].lower() == 'current':
