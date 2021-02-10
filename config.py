@@ -41,11 +41,11 @@ def add_account_details(account_name, api_key, api_secret, base_url):
     This function provides functionality for adding account details.
     """
     config_object = load_config()
-    if account_name in config_object:
+    if account_name.upper() in config_object:
         print(account_name +
               'already exists in config.ini, please chose a different name.')
     else:
-        config_object[account_name] = {
+        config_object[account_name.upper()] = {
             'API_KEY': api_key,
             'API_SECRET': api_secret,
             'BASE_URL': base_url
