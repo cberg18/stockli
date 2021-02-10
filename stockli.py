@@ -120,11 +120,17 @@ if __name__ == '__main__':
 
     elif (sys.argv[1] == '--config'):
         # TODO: Interactive config
-        if sys.argv[2] == 'help':
+        if len(sys.argv) < 3:
+            configHelpString()
+
+        elif sys.argv[2] == 'help':
             configHelpString()
 
         elif sys.argv[2] == 'configured-accounts':
-            config.list_configured_accounts()
+            accounts = config.list_configured_accounts()
+            print('Currently configured accounts: ')
+            for i in accounts:
+                print(i)
 
         elif sys.argv[2] == 'add-account':
             account_name = input('Enter account name: ')
@@ -266,13 +272,19 @@ if __name__ == '__main__':
             tracker(sys.argv[2].upper(), period)
 
     elif (sys.argv[1] == '--trade-type'):
-        if len(sys.argv) < 2:
-            print('Not enough arguments, use -h or --help for more information. ')
+        print(len(sys.argv))
+        if len(sys.argv) < 3:
+            trade_type = config.get_trade_type()
+            print('Stockli is set to use the ' + trade_type + ' endpoint.')
+        elif (sys.argv[2].lower() == 'set') and (len(sys.argv) < 4):
+            print('Please specify one of the currently configured accounts.')
 
-        trade_type = config.get_trade_type()
-        print('Stockli is set to use the ' + trade_type + ' endpoint.')
-#        if sys.argv[2].lower() == 'set' and len(sys.argv) < 4 : print('Please specify either live or paper api. ')
-#        if sys.argv[2].lower() == 'set' and ((sys.argv[3].lower() == 'live') or (sys.argv[3].lower() == 'paper')) : config.trading_type = trading_type = sys.argv[3].lower()
+        elif (sys.argv[2].lower() == 'set'):
+            accounts = config.list_configured_accounts()
+            if not sys.argv[3].upper() in accounts:
+                print(sys.argv[3] + ' is not a configured account')
+            else:
+                config.change_trade_type(sys.argv[3].upper())
 
     elif (sys.argv[1] == '--plot'):
         if (len(sys.argv) < 3):

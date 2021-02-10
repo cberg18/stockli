@@ -22,12 +22,13 @@ def list_configured_accounts():
     This function lists configured accounts.
     """
     config_object = load_config()
-    print('Currently configured accounts: ')
+    accounts = []
     for i in config_object:
         if i == 'DEFAULT' or i == 'TRADE_METHOD':
             continue
         else:
-            print(i)
+            accounts.append(i)
+    return accounts
 
 
 def get_trade_type():
@@ -95,3 +96,15 @@ def modify_account_details(parameter_list):
     This function provides functionality for modifying currently configured accounts.
     """
     pass
+
+
+def change_trade_type(trade_type):
+    '''
+    This function modifies the currently set trade type.
+    '''
+    config_object = load_config()
+    config_object.set('TRADE_METHOD', 'trade_method', trade_type)
+
+    with open('config.ini', 'w') as conf:
+        config_object.write(conf)
+    print('Trading type has been set to ' + trade_type.upper())
