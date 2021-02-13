@@ -83,9 +83,9 @@ def tracker(symbol, interval='2m'):
 
     print('Starting tracking for ' + symbol +
           ' at ' + interval + ' intervals.')
-    ticker_last = 0
+    # ticker_last = 0
     ticker_current = 0
-    ticker_change = 0
+    # ticker_change = 0
     if interval not in intervals:
         print('Specified interval, ' + interval +
               ', is not a valid interval. Valid intervals are: ')
@@ -96,14 +96,14 @@ def tracker(symbol, interval='2m'):
 
         ticker_current = yf.Ticker(symbol).history(
             period='1d', interval='2m').iloc[-1]['Close']
-        print(symbol + ': $%.2f' % (ticker_current))
-        ticker_last = ticker_current
+
+        print(symbol + ': $%.2f' % (ticker_current), end='\r')
+
+        '''ticker_last = ticker_current
         if not ticker_change == 0:
             ticker_change = (
-                (ticker_last - ticker_current) / ticker_last) * 100
-
-        if market_status == False:
-            market_status = False
+                (ticker_last - ticker_current) / ticker_last) * 100'''
+        market_status = api.get_clock().is_open
 
         time.sleep(int(interval[:-1]) * 60)
 
