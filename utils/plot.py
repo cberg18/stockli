@@ -14,12 +14,13 @@ def plot(plot_name, y, range=30):
 
     plt.clp()
     # set plot size to the size of the terminal
-    plt.fig_size(plt.terminal_size()[0], plt.terminal_size()[1])
+    plt.figsize(plt.terminal_size()[0], plt.terminal_size()[1])
     plt.plot(y)
     plt.scatter(y)
     plt.title(plot_name)
     plt.ylabel('Close Price - $')
-    plt.facecolor('iron')
+    plt.grid(True)
+    plt.axes_color('iron')
     plt.canvas_color('iron')
     plt.show()
     return

@@ -3,7 +3,7 @@
 # TODO: calc current rating
 # TODO: check if you have sufficient funds to process a buy order
 
-import datetime
+
 import os
 import sys
 import time
@@ -38,6 +38,7 @@ def helpString():
     --config                                        modify config, --config help for more information
     --list-current-positions                        list all open positions
     --market-status                                 returns if market is open or closed
+    --plot [SYMBOL]                                 simple plot of the last 30 days for [SYMBOL] 
     --sell [SYMBOL] [QUANTITY]                      sell specified quantity of a stock
     --track [SYMBOL] [PERIOD]                       track a symbol at sepcified interval until interupted, default 2m (valid periods: 1m,2m,5m,15m,30m,60m)
     --trade-type                                    gets currently used trading api, paper or live. CAUTION: AT THIS TIME, STOCKLI HAS NOT BEEN TESTED IN A LIVE ENVIRONMENT. USE AT YOUR OWN RISK.
@@ -95,15 +96,15 @@ def tracker(symbol, interval='2m'):
 
         ticker_current = yf.Ticker(symbol).history(
             period='1d', interval='2m').iloc[-1]['Close']
-        print(symbol + ': $%.2f Change: %.2f\% ' % (ticker_current, ticker_change))
+
         ticker_last = ticker_current
-        if not ticker_change == 0:
+        if ticker_last != 0:
             ticker_change = (
                 (ticker_last - ticker_current) / ticker_last) * 100
 
-        if market_status == False:
-            market_status = False
+        print(symbol + ': $%.2f (%.2f)' % (ticker_current, ticker_change), end='\r')
 
+        market_status = api.get_clock().is_open
         time.sleep(int(interval[:-1]) * 60)
 
     else:
@@ -120,11 +121,17 @@ if __name__ == '__main__':
 
     elif (sys.argv[1] == '--config'):
         # TODO: Interactive config
-        if sys.argv[2] == 'help':
+        if len(sys.argv) < 3:
+            configHelpString()
+
+        elif sys.argv[2] == 'help':
             configHelpString()
 
         elif sys.argv[2] == 'configured-accounts':
-            config.list_configured_accounts()
+            accounts = config.list_configured_accounts()
+            print('Currently configured accounts: ')
+            for i in accounts:
+                print(i)
 
         elif sys.argv[2] == 'add-account':
             account_name = input('Enter account name: ')
@@ -211,8 +218,6 @@ if __name__ == '__main__':
         '''
         syntax ./stockli --sell [SYMBOL] [QUANTITY]
         '''
-        # dummy variable to suppres pylance warning
-        positions = ''
 
         api = utils.api_connect.alpaca_connection()
         try:
@@ -268,14 +273,18 @@ if __name__ == '__main__':
             tracker(sys.argv[2].upper(), period)
 
     elif (sys.argv[1] == '--trade-type'):
-        trading_type = 'paper'
         if len(sys.argv) < 3:
-            print('Not enough arguments, use -h or --help for more information. ')
+            trade_type = config.get_trade_type()
+            print('Stockli is set to use the ' + trade_type + ' endpoint.')
+        elif (sys.argv[2].lower() == 'set') and (len(sys.argv) < 4):
+            print('Please specify one of the currently configured accounts.')
 
-        elif sys.argv[2].lower() == 'current':
-            print('Stockli is set to use the ' + trading_type + ' endpoint.')
-#        if sys.argv[2].lower() == 'set' and len(sys.argv) < 4 : print('Please specify either live or paper api. ')
-#        if sys.argv[2].lower() == 'set' and ((sys.argv[3].lower() == 'live') or (sys.argv[3].lower() == 'paper')) : config.trading_type = trading_type = sys.argv[3].lower()
+        elif (sys.argv[2].lower() == 'set'):
+            accounts = config.list_configured_accounts()
+            if not sys.argv[3].upper() in accounts:
+                print(sys.argv[3] + ' is not a configured account')
+            else:
+                config.change_trade_type(sys.argv[3].upper())
 
     elif (sys.argv[1] == '--plot'):
         if (len(sys.argv) < 3):
@@ -286,7 +295,7 @@ if __name__ == '__main__':
 
         plot.plot(sys.argv[2].upper(), df['Close'])
         print('Most recent close of \'' +
-              sys.argv[2].upper() + '\': $' + str(df.iloc[-1]['Close']))
+              sys.argv[2].upper() + '\': $%.2f' % (df.iloc[-1]['Close']))
 
     else:
         print('Specified option not recognized. Do main.py -h or --help for help.')

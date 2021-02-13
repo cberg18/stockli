@@ -22,12 +22,18 @@ def list_configured_accounts():
     This function lists configured accounts.
     """
     config_object = load_config()
-    print('Currently configured accounts: ')
+    accounts = []
     for i in config_object:
         if i == 'DEFAULT' or i == 'TRADE_METHOD':
             continue
         else:
-            print(i)
+            accounts.append(i)
+    return accounts
+
+
+def get_trade_type():
+    config_object = load_config()
+    return config_object['TRADE_METHOD']['trade_method']
 
 
 def add_account_details(account_name, api_key, api_secret, base_url):
@@ -35,11 +41,11 @@ def add_account_details(account_name, api_key, api_secret, base_url):
     This function provides functionality for adding account details.
     """
     config_object = load_config()
-    if account_name in config_object:
+    if account_name.upper() in config_object:
         print(account_name +
               'already exists in config.ini, please chose a different name.')
     else:
-        config_object[account_name] = {
+        config_object[account_name.upper()] = {
             'API_KEY': api_key,
             'API_SECRET': api_secret,
             'BASE_URL': base_url
@@ -47,6 +53,7 @@ def add_account_details(account_name, api_key, api_secret, base_url):
 
         with open('config.ini', 'w') as conf:
             config_object.write(conf)
+        print(account_name.upper() + ' has been configured. ')
 
 
 def remove_account_details(account_name):
@@ -90,3 +97,15 @@ def modify_account_details(parameter_list):
     This function provides functionality for modifying currently configured accounts.
     """
     pass
+
+
+def change_trade_type(trade_type):
+    '''
+    This function modifies the currently set trade type.
+    '''
+    config_object = load_config()
+    config_object.set('TRADE_METHOD', 'trade_method', trade_type)
+
+    with open('config.ini', 'w') as conf:
+        config_object.write(conf)
+    print('Trading type has been set to ' + trade_type.upper())
