@@ -3,13 +3,12 @@
 # TODO: calc current rating
 # TODO: check if you have sufficient funds to process a buy order
 
-
 import os
 import sys
 import time
+from datetime import datetime
 
 import utils.api_connect
-
 
 try:
     import config
@@ -102,7 +101,10 @@ def tracker(symbol, interval='2m'):
             ticker_change = (
                 (ticker_last - ticker_current) / ticker_last) * 100
 
-        print(symbol + ': $%.2f (%.2f)' % (ticker_current, ticker_change), end='\r')
+        d = datetime.today().replace(microsecond=0)
+        
+        print('['+ d +']' + symbol + ': $%.2f' % (ticker_current))
+
 
         market_status = api.get_clock().is_open
         time.sleep(int(interval[:-1]) * 60)
