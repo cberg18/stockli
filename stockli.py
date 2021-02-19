@@ -96,16 +96,17 @@ def tracker(symbol, interval='2m'):
         ticker_current = yf.Ticker(symbol).history(
             period='1d', interval='2m').iloc[-1]['Close']
 
-        ticker_last = ticker_current
         if ticker_last != 0:
             ticker_change = (
-                (ticker_last - ticker_current) / ticker_last) * 100
+                (ticker_current - ticker_last) / ticker_last) * 100
 
         d = datetime.today().replace(microsecond=0)
-        
-        print('['+ d +']' + symbol + ': $%.2f' % (ticker_current))
+        d = d.strftime("%m-%d-%Y %H:%M:%S")
 
+        print('[' + d + '] ' + symbol +
+              ': $%.2f (%3.2f)' % (ticker_current, ticker_change))
 
+        ticker_last = ticker_current
         market_status = api.get_clock().is_open
         time.sleep(int(interval[:-1]) * 60)
 
